@@ -17,3 +17,5 @@ backups/
 *.zip
 *.tar*
 .DS_Store
+.sar-lock
+.recovery-incomplete
