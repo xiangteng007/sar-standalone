@@ -42,3 +42,15 @@ Google Cloud 必須配置 Web OAuth client，將 **完全一致的 SAR_ORIGIN** 
 SAR_ORIGIN 必須為完整 origin（無路徑、尾斜線、帳密或查詢），非 loopback 要 HTTPS；本機 HTTP 的 port 必須對上 SAR_PORT（1–65535）。綁定位址限 localhost／127.0.0.1／::1，外部 TLS 經受控反向代理。白名單不可為空、email、萬用字元、重複或範例佔位字；實際 sub 必須另外核准，程式不猜測。資料目錄不得在 public 內、是 public 的上層或經符號連結落入 public。這是啟動前路徑檢查，部署目錄必須由可信任管理者控制，不能取代 ACL。
 
 預檢不驗證 Google Cloud 遠端設定、TLS 憑證、DNS、防火牆、磁碟容量或實際寫入權限；這些仍須部署驗收。啟動時儲存與監聽錯誤輸出通用代碼，不列印原始設定或檔案路徑。可重現測例為來源庫 `tests/deployment-config.mjs`。
+
+## 統一啟動入口（Windows／Linux）
+
+部署目錄安裝套件並建立私人 `.env` 後，可使用：
+
+- Windows：`START-SAR.cmd check` 預檢，`START-SAR.cmd start` 啟動。
+- Linux：`sh start-sar.sh check` 預檢，`sh start-sar.sh start` 啟動。
+- 跨平台：`node launch.mjs check` 或 `node launch.mjs start`。
+
+相對資料路徑會以部署目錄為基準，避免捷徑的工作目錄不同導致建立第二份資料庫。`.env` 必須存在；不會自動將範例複製成可登入設定。既有程序環境變數優先於 `.env`，管理者應清除過期的 `SAR_` 設定再啟動。可設定 `SAR_NODE_EXE` 指向受信任 portable Node；不更改系統 Node 或自動安裝服務。
+
+入口在前景執行，停止時在該終端按 Ctrl+C，等待程序退出才備份；不提供依連接埠掃描或殺除未知程序。這不是開機自動啟動、背景服務管理或持續運行驗收。正式部署仍須配置受控的程序管理與 TLS，並驗證關閉及重啟。

@@ -21,8 +21,8 @@ npm test
 cd outputs/standalone
 npm ci --omit=dev
 # 複製 .env.example 為 .env，於私人環境自行填寫已核准設定。
-node --env-file=.env server.mjs --check-config
-node --env-file=.env server.mjs
+node launch.mjs check
+node launch.mjs start
 ```
 
 設定範例不能直接登入。必須配置真正 Google Web OAuth client、完全一致的 origin，以及事先驗證核准的 Google `sub` 白名單；不能用 email 代替 sub，不會自動接納第一個登入者。請勿在 Issues、程式或提交中放入帳號設定、權杖或真實個案資訊。部署詳見 [操作說明](standalone/README.md)。
@@ -40,7 +40,7 @@ node --env-file=.env server.mjs
 
 ## 驗證
 
-`npm test` 執行八組測試：HTTP、乾淨安裝／程序啟停、Google 簽章合成驗證、備份還原、部署設定、儲存故障、定位／傳輸與登入回應。報告寫入被 Git 排除的 `verification/`。Google claims／裝置定位仍是合成；本機通過不代表真人登入或實機驗收通過。
+`npm test` 執行九組測試：啟動入口、HTTP、乾淨安裝／程序啟停、Google 簽章合成驗證、備份還原、部署設定、儲存故障、定位／傳輸與登入回應。報告寫入被 Git 排除的 `verification/`。Google claims／裝置定位仍是合成；本機通過不代表真人登入或實機驗收通過。
 
 `npm run check:public` 檢查已追蹤檔案的公開內容邊界與常見秘密形式；屬輔助檢查，不能保證偵測所有秘密。公開前另需人工檢查程式、附件與提交中繼資料。禁止將原私人倉庫的 Git 歷史合併至此。
 
