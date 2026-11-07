@@ -70,6 +70,8 @@ SAR_ORIGIN 必須為完整 origin（無路徑、尾斜線、帳密或查詢）�
 
 ## 統一啟動入口（Windows／Linux）
 
+Linux 常駐 VM 的 systemd 範本、主機路徑與權限、正常停機／故障處理及更新回復順序見 [deploy/README.md](deploy/README.md)。範本不會自動啟用，實際服務管理與開機驗收仍需在部署機完成。
+
 部署目錄安裝套件並建立私人 `.env` 後，可使用：
 
 - Windows：`START-SAR.cmd check` 預檢，`START-SAR.cmd start` 啟動。
