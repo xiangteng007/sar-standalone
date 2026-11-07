@@ -4,6 +4,13 @@ import {mkdtempSync,cpSync,rmSync,writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {createServer} from 'node:net';
+// Windows child.kill('SIGTERM') forcibly terminates Node and cannot prove
+// graceful lock release/restart. Keep this POSIX-only acceptance explicit.
+if(process.platform==='win32'){
+ writeFileSync('verification/standalone-process.json',JSON.stringify({scope:'POSIX SIGTERM restart; not validated on Windows',passed:0,skipped:3,reason:'Windows needs a real console/service graceful-stop test.'},null,2));
+ console.log('SKIP 3 POSIX process checks on Windows; launcher and HTTP suites run separately.');
+ process.exit(0);
+}
 const dir=mkdtempSync(join(tmpdir(),'sar-clean-install-'));let child;
 const results=[];const record=name=>{results.push({name,result:'PASS'});console.log('PASS '+name)};
 const probe=createServer();await new Promise(r=>probe.listen(0,'127.0.0.1',r));const port=probe.address().port;await new Promise(r=>probe.close(r));
